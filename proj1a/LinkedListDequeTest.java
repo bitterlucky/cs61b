@@ -1,3 +1,5 @@
+import org.junit.Test;
+
 /** Performs some basic linked list tests. */
 public class LinkedListDequeTest {
 	
@@ -36,7 +38,7 @@ public class LinkedListDequeTest {
 	public static void addIsEmptySizeTest() {
 		System.out.println("Running add/isEmpty/Size test.");
 		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-		/*
+
 		LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
@@ -58,7 +60,7 @@ public class LinkedListDequeTest {
 		lld1.printDeque();
 
 		printTestStatus(passed);
-		*/
+
 	}
 
 	/** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
@@ -67,7 +69,7 @@ public class LinkedListDequeTest {
 		System.out.println("Running add/remove test.");
 
 		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-		/*
+
 		LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 		// should be empty 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
@@ -81,12 +83,123 @@ public class LinkedListDequeTest {
 		passed = checkEmpty(true, lld1.isEmpty()) && passed;
 
 		printTestStatus(passed);
-		*/
+
 	}
 
 	public static void main(String[] args) {
 		System.out.println("Running tests.\n");
 		addIsEmptySizeTest();
 		addRemoveTest();
+	}
+	@Test
+	public void testAddFirstWithNoElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+	}
+	@Test
+	public void testAddFirstWithElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+
+	}
+	@Test
+	public void testAddLastWithNoElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addLast(13);
+	}
+	@Test
+	public void testAddLastWithElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addLast(13);
+		linkedListDeque.addLast(14);
+		linkedListDeque.addLast(15);
+	}
+	@Test
+	public void testremoveFirstWithElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		System.out.println(linkedListDeque.removeFirst());
+		System.out.println(linkedListDeque.removeFirst());
+		System.out.println(linkedListDeque.removeFirst());
+	}
+	@Test
+	public void testremoveFirstWithOneElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		System.out.println(linkedListDeque.removeFirst());
+
+	}
+	@Test
+	public void testremoveFirstWithNoElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		System.out.println(linkedListDeque.removeFirst());
+
+	}
+	@Test
+	public void testremoveLastWithElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		System.out.println(linkedListDeque.removeLast());
+		System.out.println(linkedListDeque.removeLast());
+		System.out.println(linkedListDeque.removeLast());
+	}
+	@Test
+	public void testremoveLastWithOneElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		System.out.println(linkedListDeque.removeLast());
+
+	}
+	@Test
+	public void testremoveLastWithNoElement() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		System.out.println(linkedListDeque.removeLast());
+
+	}
+	@Test
+	public void testPrintDeque() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		linkedListDeque.printDeque();
+	}
+	@Test
+	public void testGetWithExceedBound() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		System.out.println(linkedListDeque.get(3));
+	}
+	@Test
+	public void testGetWithoutExceedBound() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		System.out.println(linkedListDeque.get(2));
+	}
+	@Test
+	public void testGetRecursiveWithExceedBound() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		System.out.println(linkedListDeque.getRecursive(3));
+	}
+	@Test
+	public void testGetRecursiveWithoutExceedBound() {
+		LinkedListDeque<Integer> linkedListDeque = new LinkedListDeque<>();
+		linkedListDeque.addFirst(13);
+		linkedListDeque.addFirst(14);
+		linkedListDeque.addFirst(15);
+		System.out.println(linkedListDeque.getRecursive(2));
 	}
 } 

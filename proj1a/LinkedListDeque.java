@@ -2,9 +2,9 @@ public class LinkedListDeque<T> {
     private int size;
     private Node sentinel;
     public class Node {
-        public T item;
-        public Node prev;
-        public Node next;
+        private T item;
+        private Node prev;
+        private Node next;
         public Node(T item, Node prev, Node next) {
             this.item = item;
             this.prev = prev;
@@ -98,3 +98,4 @@ public class LinkedListDeque<T> {
 
 
 }
+

@@ -4,7 +4,7 @@ public class ArrayDeque<T> {
     private int nextFirst;
     private int nextLast;
     private T[] arrays;
-    private static final double parseRate = 0.25;
+    private static final double PARSERATE = 0.25;
     public ArrayDeque() {
         size = 0;
         maxSize = 8;
@@ -89,7 +89,10 @@ public class ArrayDeque<T> {
         }
     }
     public T removeFirst() {
-        if (maxSize >= 16 && size < parseRate * maxSize) {
+        if (isEmpty()) {
+            return null;
+        }
+        if (maxSize >= 16 && size < PARSERATE * maxSize) {
             shrink();
         }
         nextFirst = parse(nextFirst + 1);
@@ -99,7 +102,10 @@ public class ArrayDeque<T> {
 
     }
     public T removeLast() {
-        if (maxSize >= 16 && size < parseRate * maxSize) {
+        if (isEmpty()) {
+            return null;
+        }
+        if (maxSize >= 16 && size < PARSERATE * maxSize) {
             shrink();
         }
         nextLast = parse(nextLast - 1);

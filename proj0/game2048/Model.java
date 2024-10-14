@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author syx
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -113,7 +113,170 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        board.setViewingPerspective(side);
+        int size = board.size();
+        for (int i = 0; i < size; i++) { // col
+            int length = 0; //the length of existing tile
+            //the below is to calculate the length of existing tile(i.e. length)
+            for (int j = size - 1; j >= 0; j--) { // row
+                if (board.tile(i, j) != null) {
+                    length++;
+                }
+            }
+            //no existing tile
+            if (length == 0) {
 
+
+            } else if (length == 1) { //one existing file
+                //the only tile is on the top, so doesn't change
+                if (board.tile(i, size - 1) != null) {
+
+                } else { // the only tile is not on the top, so change
+                    changed = true;
+                    for (int j = size - 1; j >= 0; j--) {
+                        Tile temp = board.tile(i, j);
+                        if (temp != null) {
+                            board.move(i, size - 1, temp);
+                            break;
+                        }
+                    }
+                }
+            } else if (length == 2) { // two existing tile
+                //the above is to get the two existing tile
+                Tile firstTile = null;
+                Tile secondTile = null;
+                int number = 0;
+                for (int j = size - 1; j >= 0; j--) {
+                    Tile temp = board.tile(i, j);
+                    if (temp != null) {
+                        if (number == 0) {
+                            firstTile = temp;
+                            number += 1;
+                        } else if (number == 1) {
+                            secondTile = temp;
+                            break;
+                        }
+                    }
+                }
+                //value is equal
+                if (firstTile.value() == secondTile.value()) {
+                    score += 2 * firstTile.value();
+                    board.move(i, size - 1, firstTile);
+                    board.move(i, size - 1, secondTile);
+                    changed = true;
+                } else { // value is not equal
+                    if (firstTile.row() == size - 1 && secondTile.row() == size - 2) {
+
+                    } else {
+                        board.move(i, size - 1, firstTile);
+                        board.move(i, size - 2, secondTile);
+                        changed = true;
+                    }
+                }
+            } else if (length == 3) { // three existing tile
+                //the above is to get the three existing tile
+                Tile firstTile = null;
+                Tile secondTile = null;
+                Tile thirdTile = null;
+                int number = 0;
+                for (int j = size - 1; j >= 0; j--) {
+                    Tile temp = board.tile(i, j);
+                    if (temp != null) {
+                        if (number == 0) {
+                            firstTile = temp;
+                            number += 1;
+                        } else if (number == 1) {
+                            secondTile = temp;
+                            number += 1;
+                        } else if (number == 2) {
+                            thirdTile = temp;
+                            break;
+                        }
+                    }
+                }
+                //do not exist merge
+                if (firstTile.value() != secondTile.value() && secondTile.value() != thirdTile.value()) {
+                    //changed is false if the three exist at the top
+                    if (firstTile.row() == size - 1 && secondTile.row() == size - 2 && thirdTile.row() == size - 3) {
+
+                    } else {
+                        board.move(i, size - 1, firstTile);
+                        board.move(i, size - 2, secondTile);
+                        board.move(i, size - 3, thirdTile);
+                        changed = true;
+                    }
+                } else if (firstTile.value() == secondTile.value()) { // the first two merge
+                    score += 2 * firstTile.value();
+                    board.move(i, size - 1, firstTile);
+                    board.move(i, size - 1, secondTile);
+                    board.move(i, size - 2, thirdTile);
+                    changed = true;
+                } else if (firstTile.value() != secondTile.value() && secondTile.value() == thirdTile.value()) {
+                    score += 2 * secondTile.value();
+                    board.move(i, size - 1, firstTile);
+                    board.move(i, size - 2, secondTile);
+                    board.move(i, size - 2, thirdTile);
+                    changed = true;
+                }
+            } else { // four existing tile
+                //the above is to get the four existing tile
+                Tile firstTile = null;
+                Tile secondTile = null;
+                Tile thirdTile = null;
+                Tile fourthTile = null;
+                int number = 0;
+                for (int j = size - 1; j >= 0; j--) {
+                    Tile temp = board.tile(i, j);
+                    if (temp != null) {
+                        if (number == 0) {
+                            firstTile = temp;
+                            number += 1;
+                        } else if (number == 1) {
+                            secondTile = temp;
+                            number += 1;
+                        } else if (number == 2) {
+                            thirdTile = temp;
+                            number += 1;
+                        } else {
+                            fourthTile = temp;
+                            break;
+                        }
+                    }
+                }
+                // do not merge
+                if (firstTile.value() != secondTile.value() && secondTile.value() != thirdTile.value() && thirdTile.value() != fourthTile.value()) {
+
+                } else if (firstTile.value() == secondTile.value() && thirdTile.value() == fourthTile.value()) { // merge two
+                    changed = true;
+                    score += 2 * firstTile.value();
+                    score += 2 * thirdTile.value();
+                    board.move(i, size - 1, secondTile);
+                    board.move(i, size - 2, thirdTile);
+                    board.move(i, size - 2, fourthTile);
+                } else if (firstTile.value() == secondTile.value() && thirdTile.value() != fourthTile.value()) { //first and two merge, three and four does not merge
+                    changed = true;
+                    score += 2 * firstTile.value();
+                    board.move(i, size - 1, secondTile);
+                    board.move(i, size - 2, thirdTile);
+                    board.move(i, size - 3, fourthTile);
+                } else if (firstTile.value() != secondTile.value() && secondTile.value() == thirdTile.value()) { // two and three merge
+                    changed = true;
+                    score += 2 * secondTile.value();
+                    board.move(i, size - 2, thirdTile);
+                    board.move(i, size - 3, fourthTile);
+                } else if (firstTile.value() != secondTile.value() && secondTile.value() != thirdTile.value() && thirdTile.value() == fourthTile.value()) { // three and four merge
+                    changed = true;
+                    score += 2 * thirdTile.value();
+                    board.move(i, size - 3, fourthTile);
+
+                }
+            }
+
+        }
+//        if (score > maxScore) {
+//            maxScore = score;
+//        }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
@@ -137,7 +300,14 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (b.tile(i, j) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -147,7 +317,15 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Tile temp = b.tile(i, j);
+                if (temp != null && temp.value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -158,7 +336,105 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        int size = b.size();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (b.tile(i, j) == null) {
+                    return true;
+                }
+            }
+        }
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == 0 && j == 0) {
+                    if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i + 1, j).value() == b.tile(i, j).value()) {
+                        return true;
+                    }
+                } else if (i == 0 && j == size - 1) {
+                    if (b.tile(i, j).value() == b.tile(i, j - 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()) {
+                        return true;
+                    }
+
+                } else if (i == 0) {
+                    if (b.tile(i, j).value() == b.tile(i, j - 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()) {
+                        return true;
+                    }
+
+                } else if (i == size - 1 && j == 0) {
+                    if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i - 1, j).value()) {
+                        return true;
+                    }
+
+                } else if (i == size - 1 && j == size - 1) {
+                    if (b.tile(i, j).value() == b.tile(i, j - 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i - 1, j).value()) {
+                        return true;
+                    }
+
+                } else if (i == size - 1) {
+                    if (b.tile(i, j).value() == b.tile(i, j - 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i - 1, j).value()) {
+                        return true;
+                    }
+                } else if (j == 0) {
+                    if (b.tile(i, j).value() == b.tile(i - 1, j).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+
+                } else if (j == size - 1) {
+                    if (b.tile(i, j).value() == b.tile(i, j - 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i - 1, j).value()) {
+                        return true;
+                    }
+                } else {
+                    if (b.tile(i, j).value() == b.tile(i, j - 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i + 1, j).value()) {
+                        return true;
+                    }
+                    if (b.tile(i, j).value() == b.tile(i - 1, j).value()) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 

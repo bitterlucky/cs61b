@@ -1,7 +1,12 @@
 package deque;
 
 
+
 import org.junit.Test;
+
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 
@@ -225,5 +230,29 @@ public class LinkedListDequeTest {
         System.out.println(integerLinkedListDeque.getRecursive(2));
         System.out.println(integerLinkedListDeque.getRecursive(3));
         System.out.println(integerLinkedListDeque.getRecursive(-1));
+    }
+    @Test
+    public void testIterator() {
+        LinkedListDeque<Integer> integerLinkedListDeque = new LinkedListDeque<>();
+        integerLinkedListDeque.addFirst(10);
+        integerLinkedListDeque.addFirst(20);
+        integerLinkedListDeque.addFirst(30);
+        Iterator<Integer> iterator = integerLinkedListDeque.iterator();
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            System.out.println(next);
+        }
+    }
+    @Test
+    public void testEqual() {
+        LinkedListDeque<Integer> integerLinkedListDeque01 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> integerLinkedListDeque02 = new LinkedListDeque<>();
+        integerLinkedListDeque02.addFirst(10);
+        integerLinkedListDeque01.addFirst(10);
+        integerLinkedListDeque01.addFirst(20);
+        integerLinkedListDeque02.addFirst(20);
+        integerLinkedListDeque01.addFirst(30);
+        integerLinkedListDeque02.addFirst(30);
+        System.out.println(integerLinkedListDeque01.equals(integerLinkedListDeque02));
     }
 }

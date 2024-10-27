@@ -1,7 +1,10 @@
 package deque;
 
 
+
 import org.junit.Test;
+
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -124,5 +127,29 @@ public class ArrayDequeTest {
 
 
 
+    }
+    @Test
+    public void testIterator() {
+        ArrayDeque<Integer> integerArrayDeque = new ArrayDeque<>();
+        for (int i = 0; i < 30; i++) {
+            integerArrayDeque.addLast(i);
+        }
+        Iterator<Integer> iterator = integerArrayDeque.iterator();
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            System.out.print(next + " ");
+        }
+    }
+    @Test
+    public void testEquals() {
+        ArrayDeque<Integer> integerArrayDeque = new ArrayDeque<>();
+        for (int i = 0; i < 30; i++) {
+            integerArrayDeque.addLast(i);
+        }
+        ArrayDeque<Integer> integerArrayDeque1 = new ArrayDeque<>();
+        for (int i = 0; i < 30; i++) {
+            integerArrayDeque1.addLast(i);
+        }
+        System.out.println(integerArrayDeque.equals(integerArrayDeque1));
     }
 }

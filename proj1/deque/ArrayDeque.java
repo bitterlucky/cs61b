@@ -2,12 +2,12 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     private int size;
     private int nextFirst;
     private int nextLast;
     private T[] arrays;
-    private static final double factor = 0.25;
+    private static final double FACTOR = 0.25;
     public ArrayDeque() {
         size = 0;
         nextFirst = 0;
@@ -81,7 +81,7 @@ public class ArrayDeque<T> implements Deque<T>{
         if (size == 0) {
             return null;
         }
-        if (arrays.length >= 16 && size < arrays.length * factor) {
+        if (arrays.length >= 16 && size < arrays.length * FACTOR) {
             resize(arrays.length / 2);
         }
         T item = arrays[parseFirstAndNext(nextFirst + 1)];
@@ -97,7 +97,7 @@ public class ArrayDeque<T> implements Deque<T>{
         if (size == 0) {
             return null;
         }
-        if (arrays.length >= 16 && size < arrays.length * factor) {
+        if (arrays.length >= 16 && size < arrays.length * FACTOR) {
             resize(arrays.length / 2);
         }
         T item = arrays[parseFirstAndNext(nextLast - 1)];
@@ -137,7 +137,7 @@ public class ArrayDeque<T> implements Deque<T>{
     }
     private class ArrayDequeIterator implements Iterator<T> {
         private int position;
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             position = 0;
         }
         @Override

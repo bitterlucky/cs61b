@@ -1,12 +1,12 @@
 package flik;
 
 public class HorribleSteve {
-    public static void main(String [] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         int i = 0;
-        for (int j = 0; i < 500; ++i, ++j) {
+        final int size = 500;
+        for (int j = 0; i < size; ++i, ++j) {
             if (!Flik.isSameNumber(i, j)) {
-                throw new Exception(
-                        String.format("i:%d not same as j:%d ??", i, j));
+                throw new Exception(String.format("i:%d not same as j:%d ??", i, j));
             }
         }
         System.out.println("i is " + i);

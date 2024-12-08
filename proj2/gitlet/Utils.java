@@ -93,7 +93,7 @@ class Utils {
     /** Return the entire contents of FILE as a byte array.  FILE must
      *  be a normal file.  Throws IllegalArgumentException
      *  in case of problems. */
-    static byte[] readContents(File file) {
+     static byte[] readContents(File file){
         if (!file.isFile()) {
             throw new IllegalArgumentException("must be a normal file");
         }

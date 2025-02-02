@@ -109,11 +109,117 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        board.setViewingPerspective(side);
+        int size = board.size();
+        //i代表的是col, j代表的是row
+        for (int i = 0; i < size; i++) {
+            boolean isMerged[] = {false, false, false, false};
+            for (int j = size - 1; j >= 0; j--) {
+                if (j == size - 2) {
+                    Tile tile = board.tile(i, j);
+                    if (tile != null) {
+                        int value = tile.value();
+                        if (board.tile(i, j + 1) == null) {
+                            board.move(i, j + 1, tile);
+                            changed = true;
+                        } else {
+                            if (board.tile(i, j + 1).value() == board.tile(i, j).value()) {
+                                board.move(i, j + 1, tile);
+                                changed = true;
+                                score += value * 2;
+                                isMerged[3] = true;
+                            }
+                        }
+                    }
+                } else if (j == size - 3) {
+                    Tile tile = board.tile(i, j);
+                    if (tile != null) {
+                        int value = tile.value();
+                        if (board.tile(i, 3) == null) {
+                            board.move(i, 3, tile);
+                        } else {
+                            if (board.tile(i, 2) != null) {//j = 2处有tile
+                                if (value == board.tile(i, 2).value()) {
+                                    isMerged[2] = true;
+                                    board.move(i, 2, tile);
+                                    changed = true;
+                                    score += value * 2;
+                                }
+                            } else { // j = 2处没有tile
+                                if (isMerged[3] == true) {
+                                    board.move(i, 2, tile);
+                                    changed = true;
+                                } else {
+                                    if (board.tile(i, 3).value() == value) {
+                                        isMerged[3] = true;
+                                        changed = true;
+                                        score += value * 2;
+                                        board.move(i, 3, tile);
+                                    } else {
+                                        board.move(i, 2, tile);
+                                        changed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else if (j == size - 4) {
+                    Tile tile = board.tile(i, j);
+                    if (tile != null) {
+                        int value = tile.value();
+                        if (board.tile(i, 3) == null) { // j=3处没有tile
+                            board.move(i, 3, tile);
+                            changed = true;
+                        } else { // j = 3处有tile
+                            if (board.tile(i, 2) == null) { // j = 2处没有tile
+                                if (isMerged[3] == true) {
+                                    board.move(i, 2, tile);
+                                    changed = true;
+                                } else {
+                                    if (board.tile(i, 3).value() == value) {
+                                        board.move(i, 3, tile);
+                                        changed = true;
+                                        score += 2 * value;
+                                        isMerged[3] = true;
+                                    } else {
+                                        board.move(i, 2, tile);
+                                        changed = true;
+                                    }
+                                }
+                            } else { // j = 2处有tile
+                                if (board.tile(i, 1) == null) { // j = 1处无tile
+                                    if (isMerged[2] == true) {
+                                        board.move(i, 1, tile);
+                                        changed = true;
+                                    } else {
+                                        if (board.tile(i, 2).value() == value) {
+                                            board.move(i, 2, tile);
+                                            changed = true;
+                                            isMerged[2] = true;
+                                            score += 2 * value;
+                                        } else {
+                                            board.move(i, 1, tile);
+                                            changed = true;
+                                        }
+                                    }
+                                } else {// j = 1 处有tile
+                                    if (board.tile(i, 1).value() == value) {
+                                        changed = true;
+                                        score += 2 * value;
+                                        isMerged[1] = true;
+                                        board.move(i, 1, tile);
+                                    }
+                                }
 
-        // TODO: Modify this.board (and perhaps this.score) to account
-        // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
 
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
@@ -137,8 +243,17 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        int rows = b.size();
+        int cols = b.size();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (b.tile(i, j) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
+
     }
 
     /**
@@ -147,8 +262,18 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int rows = b.size();
+        int cols = b.size();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                Tile tile = b.tile(i, j);
+                if (tile != null && tile.value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
         return false;
+
     }
 
     /**
@@ -158,7 +283,130 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if (emptySpaceExists(b)) {
+            return true;
+        }
+        int rows = b.size();
+        int cols = b.size();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                Tile left;
+                Tile up;
+                Tile right;
+                Tile down;
+                Tile thisTile = b.tile(j, i);
+                if (i == 0 && j == 0) {
+                    right = b.tile(j + 1, i);
+                    up = b.tile(j, i + 1);
+                    if (right.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (up.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (i == 0 && j == cols - 1) {
+                    left = b.tile(j - 1, i);
+                    up = b.tile(j, i + 1);
+                    if (left.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (up.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (j == 0 && i == rows - 1) {
+                    right = b.tile(j + 1, i);
+                    down = b.tile(j, i - 1);
+                    if (right.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (down.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (j == cols - 1 && i == rows - 1) {
+                    left = b.tile(j - 1, i);
+                    down = b.tile(j, i - 1);
+                    if (left.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (down.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (j == 0) {
+                    right = b.tile(j + 1, i);
+                    up = b.tile(j, i + 1);
+                    down = b.tile(j, i - 1);
+                    if (right.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (down.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (up.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (i == 0) {
+                    right = b.tile(j + 1, i);
+                    up = b.tile(j, i + 1);
+                    left = b.tile(j - 1, i);
+                    if (left.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (right.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (up.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (j == cols - 1) {
+
+                    up = b.tile(j, i + 1);
+                    down = b.tile(j, i - 1);
+                    left = b.tile(j - 1, i);
+                    if (left.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (down.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (up.value() == thisTile.value()) {
+                        return true;
+                    }
+                } else if (i == rows - 1) {
+                    right = b.tile(j + 1, i);
+                    down = b.tile(j, i - 1);
+                    left = b.tile(j - 1, i);
+                    if (left.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (right.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (down.value() == thisTile.value()) {
+                        return true;
+                    }
+
+                } else {
+                    right = b.tile(j + 1, i);
+                    up = b.tile(j, i + 1);
+                    down = b.tile(j, i - 1);
+                    left = b.tile(j - 1, i);
+                    if (left.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (right.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (down.value() == thisTile.value()) {
+                        return true;
+                    }
+                    if (up.value() == thisTile.value()) {
+                        return true;
+                    }
+
+
+                }
+            }
+        }
         return false;
     }
 

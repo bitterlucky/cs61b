@@ -104,10 +104,10 @@ public class ArrayDeque<T> implements Deque<T>{
         T item;
         if (nextFirst == array.length - 1) {
             item = array[0];
-            array[0] = null;
+//            array[0] = null;
         } else {
             item = array[nextFirst + 1];
-            array[nextFirst + 1] = null;
+//            array[nextFirst + 1] = null;
         }
         size--;
         if (array.length >= 16 && array.length * factor > size) {
@@ -125,10 +125,10 @@ public class ArrayDeque<T> implements Deque<T>{
         T item;
         if (nextLast == 0) {
             item = array[array.length - 1];
-            array[array.length - 1] = null;
+//            array[array.length - 1] = null;
         } else {
             item = array[nextLast - 1];
-            array[nextLast - 1] = null;
+//            array[nextLast - 1] = null;
         }
         size--;
         if (array.length >= 16 && array.length * factor > size) {
@@ -155,6 +155,7 @@ public class ArrayDeque<T> implements Deque<T>{
             } else {
                 first = first + 1;
             }
+            i = i + 1;
         }
         return array[first];
     }

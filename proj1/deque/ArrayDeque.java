@@ -18,13 +18,14 @@ public class ArrayDeque<T> implements Deque<T>{
     public void addFirst(T item) {
         if (size == array.length) {
             resize(array.length * 2);
+        }
+
+        array[nextFirst] = item;
+        if (nextFirst == 0) {
+            nextFirst = array.length - 1;
         } else {
-            array[nextFirst] = item;
-            if (nextFirst == 0) {
-                nextFirst = array.length - 1;
-            } else {
-                nextFirst = nextFirst - 1;
-            }
+            nextFirst = nextFirst - 1;
+
         }
         size = size + 1;
     }
@@ -55,14 +56,14 @@ public class ArrayDeque<T> implements Deque<T>{
     public void addLast(T item) {
         if (size == array.length) {
             resize(array.length * 2);
-        } else {
-            array[nextLast] = item;
-            if (nextLast == array.length - 1) {
-                nextLast = 0;
-            } else {
-                nextLast = nextLast + 1;
-            }
         }
+        array[nextLast] = item;
+        if (nextLast == array.length - 1) {
+            nextLast = 0;
+        } else {
+            nextLast = nextLast + 1;
+        }
+
         size = size + 1;
     }
 
@@ -104,12 +105,13 @@ public class ArrayDeque<T> implements Deque<T>{
         T item;
         if (nextFirst == array.length - 1) {
             item = array[0];
-//            array[0] = null;
+            nextFirst = 0;
         } else {
             item = array[nextFirst + 1];
-//            array[nextFirst + 1] = null;
+            nextFirst = nextFirst + 1;
         }
         size--;
+
         if (array.length >= 16 && array.length * factor > size) {
             resize(array.length / 2);
         }
@@ -125,10 +127,10 @@ public class ArrayDeque<T> implements Deque<T>{
         T item;
         if (nextLast == 0) {
             item = array[array.length - 1];
-//            array[array.length - 1] = null;
+            nextLast = array.length - 1;
         } else {
             item = array[nextLast - 1];
-//            array[nextLast - 1] = null;
+            nextLast = nextLast - 1;
         }
         size--;
         if (array.length >= 16 && array.length * factor > size) {

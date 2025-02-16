@@ -8,6 +8,9 @@ public class MaxArrayDeque<T> extends ArrayDeque{
         this.c = c;
     }
     public T max() {
+        if (size() == 0) {
+            return null;
+        }
         T maxElement = (T)get(0);
         for (int i = 0; i < size(); i++) {
             T thisElement = (T)get(i);

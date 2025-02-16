@@ -54,7 +54,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
         size++;
     }
 
-    
+
 
     @Override
     public int size() {
@@ -113,11 +113,11 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     }
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof LinkedListDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        o = (LinkedListDeque)o;
-        if (((LinkedListDeque<?>) o).size() != size) {
+//        o = (LinkedListDeque)o;
+        if (((LinkedListDeque<?>) o).size() != this.size()) {
             return false;
         }
         for (int i = 0; i < size; i++) {

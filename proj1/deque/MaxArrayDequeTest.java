@@ -15,7 +15,7 @@ public class MaxArrayDequeTest {
             }
         };
         MaxArrayDeque<Integer> integerMaxArrayDeque = new MaxArrayDeque<>(comparator);
-        
+
 
     }
 }

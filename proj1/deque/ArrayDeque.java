@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     private final static double factor = 0.25;
     private int size;
     private T[] array;
@@ -67,10 +67,7 @@ public class ArrayDeque<T> implements Deque<T>{
         size = size + 1;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
+
 
     @Override
     public int size() {

@@ -2,8 +2,8 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
-    private final static double factor = 0.25;
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
+    private static final double FACTOR = 0.25;
     private int size;
     private T[] array;
     private int nextFirst;
@@ -109,7 +109,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         }
         size--;
 
-        if (array.length >= 16 && array.length * factor > size) {
+        if (array.length >= 16 && array.length * FACTOR > size) {
             resize(array.length / 2);
         }
         return item;
@@ -130,7 +130,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
             nextLast = nextLast - 1;
         }
         size--;
-        if (array.length >= 16 && array.length * factor > size) {
+        if (array.length >= 16 && array.length * FACTOR > size) {
             resize(array.length / 2);
         }
         return item;
@@ -165,7 +165,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     }
     private class ArrayDequeIterator implements Iterator<T> {
         private int wizPos;
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             wizPos = 0;
         }
         @Override
@@ -182,15 +182,14 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     }
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof ArrayDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-
-        if (((ArrayDeque<?>) o).size() != this.size()) {
+        if (((Deque<?>) o).size() != this.size) {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if (!(get(i).equals(((ArrayDeque<?>) o).get(i)))) {
+            if (!(get(i).equals(((Deque<?>) o).get(i)))) {
                 return false;
             }
         }
